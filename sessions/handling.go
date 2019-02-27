@@ -2,7 +2,7 @@ package sessions
 
 import (
 	"github.com/Knetic/govaluate"
-	"github.com/enderian.directrd/types"
+	"github.com/enderian/directrd/types"
 	"log"
 	"time"
 )

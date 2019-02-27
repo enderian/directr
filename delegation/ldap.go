@@ -4,7 +4,7 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
-	"github.com/enderian.directrd/types"
+	"github.com/enderian/directrd/types"
 	"gopkg.in/ldap.v3"
 	"strings"
 )

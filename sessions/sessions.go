@@ -2,7 +2,7 @@ package sessions
 
 import (
 	"context"
-	"github.com/enderian.directrd/types"
+	"github.com/enderian/directrd/types"
 )
 
 var ctx context.Context

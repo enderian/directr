@@ -2,7 +2,7 @@ package users
 
 import (
 	"errors"
-	"github.com/enderian.directrd/types"
+	"github.com/enderian/directrd/types"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 )

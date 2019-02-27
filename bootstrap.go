@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/enderian.directrd/database"
-	"github.com/enderian.directrd/delegation"
-	"github.com/enderian.directrd/radius"
-	"github.com/enderian.directrd/sessions"
-	"github.com/enderian.directrd/types"
-	"github.com/enderian.directrd/users"
+	"github.com/enderian/directrd/database"
+	"github.com/enderian/directrd/delegation"
+	"github.com/enderian/directrd/radius"
+	"github.com/enderian/directrd/sessions"
+	"github.com/enderian/directrd/types"
+	"github.com/enderian/directrd/users"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"

@@ -2,7 +2,7 @@ package users
 
 import (
 	"errors"
-	"github.com/enderian.directrd/types"
+	"github.com/enderian/directrd/types"
 )
 
 func findUser(user *types.User) error {

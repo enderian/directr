@@ -2,7 +2,7 @@ package database
 
 import (
 	"context"
-	"github.com/enderian.directrd/types"
+	"github.com/enderian/directrd/types"
 	"github.com/go-pg/pg"
 	"log"
 )

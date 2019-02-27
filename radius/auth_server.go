@@ -1,7 +1,7 @@
 package radius
 
 import (
-	"github.com/enderian.directrd/users"
+	"github.com/enderian/directrd/users"
 	"layeh.com/radius"
 	"layeh.com/radius/rfc2865"
 	"log"

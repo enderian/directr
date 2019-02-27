@@ -1,7 +1,7 @@
 package radius
 
 import (
-	"github.com/enderian.directrd/sessions"
+	"github.com/enderian/directrd/sessions"
 	"layeh.com/radius"
 	"layeh.com/radius/rfc2865"
 	"layeh.com/radius/rfc2866"

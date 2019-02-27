@@ -1,9 +1,9 @@
 package users
 
 import (
-	"github.com/enderian.directrd/delegation"
-	"github.com/enderian.directrd/sessions"
-	"github.com/enderian.directrd/types"
+	"github.com/enderian/directrd/delegation"
+	"github.com/enderian/directrd/sessions"
+	"github.com/enderian/directrd/types"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 )

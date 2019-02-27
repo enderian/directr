@@ -2,7 +2,7 @@ package users
 
 import (
 	"github.com/Knetic/govaluate"
-	"github.com/enderian.directrd/types"
+	"github.com/enderian/directrd/types"
 )
 
 func autoRegister(user *types.User, identifier string) (err error) {

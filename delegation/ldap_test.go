@@ -1,7 +1,7 @@
 package delegation
 
 import (
-	"github.com/enderian.directrd/types"
+	"github.com/enderian/directrd/types"
 	"testing"
 )
 
