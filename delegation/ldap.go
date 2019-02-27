@@ -2,7 +2,7 @@ package directoryDelegation
 
 import (
 	"crypto/tls"
-	"ender.gr/directory"
+	"ender.gr/directrd/types"
 	"errors"
 	"fmt"
 	"gopkg.in/ldap.v3"
@@ -13,7 +13,7 @@ func initLdapConnection() (*ldap.Conn, error) {
 	var l *ldap.Conn
 	var err error
 
-	if conf == nil || conf.LDAP == nil {
+	if conf == nil || conf.LDAP.Address == "" {
 		return nil, errors.New("ldap has not been enabled")
 	}
 
@@ -31,7 +31,7 @@ func initLdapConnection() (*ldap.Conn, error) {
 	return l, l.Bind(conf.LDAP.BindUsername, conf.LDAP.BindPassword)
 }
 
-func AuthenticateLdap(user *directory.User, password string) error {
+func AuthenticateLdap(user *types.User, password string) error {
 	l, err := initLdapConnection()
 	if err != nil {
 		return err
@@ -43,7 +43,7 @@ func AuthenticateLdap(user *directory.User, password string) error {
 		conf.LDAP.SearchClass, conf.LDAP.UsernameAttribute, user.Username)
 	searchRequest := ldap.NewSearchRequest(
 		conf.LDAP.BaseDN, ldap.ScopeWholeSubtree, ldap.NeverDerefAliases,
-		0, 0, false, filter, []string{"dn"}, nil, )
+		0, 0, false, filter, []string{"dn"}, nil)
 
 	sr, err := l.Search(searchRequest)
 	if err != nil {
@@ -65,7 +65,7 @@ func AuthenticateLdap(user *directory.User, password string) error {
 	return FillLdap(user)
 }
 
-func FillLdap(user *directory.User) error {
+func FillLdap(user *types.User) error {
 	l, err := initLdapConnection()
 	if err != nil {
 		return err
@@ -77,7 +77,7 @@ func FillLdap(user *directory.User) error {
 		conf.LDAP.SearchClass, conf.LDAP.UsernameAttribute, user.Username)
 	searchRequest := ldap.NewSearchRequest(
 		conf.LDAP.BaseDN, ldap.ScopeWholeSubtree, ldap.NeverDerefAliases,
-		0, 0, false, filter, nil, nil, )
+		0, 0, false, filter, nil, nil)
 
 	sr, err := l.Search(searchRequest)
 	if err != nil {

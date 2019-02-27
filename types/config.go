@@ -1,16 +1,30 @@
-package directory
+package types
 
-type MasterConfiguration struct {
-	User   *UserConfiguration   `yaml:"user"`
-	Radius *RadiusConfiguration `yaml:"radius"`
-	LDAP   *LdapConfiguration   `yaml:"ldap"`
+type Configuration struct {
+	Database string `yaml:"database"`
+	Logs     string `yaml:"logs"`
+
+	User   UserConfiguration   `yaml:"user"`
+	Radius RadiusConfiguration `yaml:"radius"`
+	LDAP   LdapConfiguration   `yaml:"ldap"`
 }
+
+type AuthenticationStrategy string
+
+const (
+	AuthenticationLDAP   AuthenticationStrategy = "ldap"
+	AuthenticationCached AuthenticationStrategy = "cached"
+	AuthenticationLocal  AuthenticationStrategy = "local"
+)
 
 type UserConfiguration struct {
 	Authentication []AuthenticationStrategy `yaml:"authentication"`
 
-	AutoRegister      bool   `yaml:"auto_register"`
-	AutoRegisterRules []Rule `yaml:"auto_register_rules"`
+	Authorization      bool  `yaml:"authorization"`
+	AuthorizationRules Rules `yaml:"authorization_rules"`
+
+	AutoRegister      bool  `yaml:"auto_register"`
+	AutoRegisterRules Rules `yaml:"auto_register_rules"`
 
 	RegistrationFilter string `yaml:"registration_filter"`
 }
@@ -40,4 +54,3 @@ type LdapConfiguration struct {
 	ExtraAttributes map[string]string `yaml:"extra_attributes"`
 	FixFullNameCase bool              `yaml:"fix_full_name_case"`
 }
-

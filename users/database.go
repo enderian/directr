@@ -1,14 +1,18 @@
 package directoryUsers
 
 import (
-	"ender.gr/directory"
+	"ender.gr/directrd/types"
 	"errors"
 )
 
-func findUser(user *directory.User) error {
+func findUser(user *types.User) error {
 	return errors.New("user not found")
 }
 
-func insertUser(user *directory.User) error {
+func updateUser(user *types.User) error {
+	return nil
+}
+
+func insertUser(user *types.User) error {
 	return nil
 }

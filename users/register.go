@@ -1,13 +1,13 @@
 package directoryUsers
 
 import (
-	"ender.gr/directory"
+	"ender.gr/directrd/types"
 	"github.com/Knetic/govaluate"
 )
 
-func autoRegister(user *directory.User, identifier string) (err error) {
+func autoRegister(user *types.User, identifier string) (err error) {
 	if !conf.User.AutoRegister {
-		return directory.ErrorNotRegistered
+		return types.ErrorNotRegistered
 	}
 
 	//defers run at the end of the function. Like finally!
@@ -17,13 +17,12 @@ func autoRegister(user *directory.User, identifier string) (err error) {
 			err = insertUser(user)
 		}
 	}()
-
 	if conf.User.AutoRegisterRules == nil {
 		return nil
 	}
 	//Check ALL THE RULES.
-	return directory.ExecuteRules(conf.User.AutoRegisterRules, govaluate.MapParameters{
-		"user": user,
+	return conf.User.AutoRegisterRules.ExecuteRules(govaluate.MapParameters{
+		"user":    user,
 		"machine": identifier,
 	})
 }

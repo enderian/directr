@@ -1,9 +1,14 @@
 package directoryUsers
 
-import "ender.gr/directory"
+import (
+	"context"
+	"ender.gr/directrd/types"
+)
 
-var conf *directory.MasterConfiguration
+var ctx context.Context
+var conf *types.Configuration
 
-func Setup(configuration *directory.MasterConfiguration) {
+func Setup(context context.Context, configuration *types.Configuration) {
 	conf = configuration
+	ctx = context
 }

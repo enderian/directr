@@ -1,4 +1,4 @@
-package directoryDelegation
+package sessions
 
 import (
 	"context"

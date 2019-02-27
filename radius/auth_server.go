@@ -1,7 +1,7 @@
 package directoryRadius
 
 import (
-	"ender.gr/directory/users"
+	"ender.gr/directrd/users"
 	"layeh.com/radius"
 	"layeh.com/radius/rfc2865"
 	"log"
@@ -27,15 +27,15 @@ func startAuthServer() {
 	}
 
 	server := radius.PacketServer{
-		Addr: conf.Radius.AuthAddress,
-		Handler: radius.HandlerFunc(handler),
+		Addr:         conf.Radius.AuthAddress,
+		Handler:      radius.HandlerFunc(handler),
 		SecretSource: radius.StaticSecretSource([]byte(conf.Radius.SharedSecret)),
 	}
 	if server.Addr == "" {
 		server.Addr = ":1812"
 	}
 
-	log.Printf("Starting authentication server on %s", server.Addr)
+	log.Printf("Starting RADIUS authentication server on %s", server.Addr)
 	if err := server.ListenAndServe(); err != nil {
 		log.Fatalf("Error while starting RADIUS auth server: %s", err.Error())
 	}

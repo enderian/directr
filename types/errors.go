@@ -1,4 +1,4 @@
-package directory
+package types
 
 type dirError string
 

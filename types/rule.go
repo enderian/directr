@@ -1,10 +1,12 @@
-package directory
+package types
 
 import (
 	"errors"
 	"github.com/Knetic/govaluate"
 	"log"
 )
+
+type Rules []Rule
 
 type Rule struct {
 	Rule    string `yaml:"rule"`
@@ -13,7 +15,7 @@ type Rule struct {
 	Error   string `yaml:"error"`
 }
 
-func ExecuteRules(rules []Rule, parameters govaluate.MapParameters) error {
+func (rules Rules) ExecuteRules(parameters govaluate.MapParameters) error {
 	for _, rule := range rules {
 		expr, err := govaluate.NewEvaluableExpression(rule.Rule)
 		if err != nil {
