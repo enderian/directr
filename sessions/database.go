@@ -1,8 +1,8 @@
 package sessions
 
 import (
-	"ender.gr/directrd/types"
 	"errors"
+	"github.com/enderian.directrd/types"
 )
 
 func findSession(id *types.Session) error {

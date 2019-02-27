@@ -1,8 +1,8 @@
-package directoryUsers
+package users
 
 import (
-	"ender.gr/directrd/types"
 	"errors"
+	"github.com/enderian.directrd/types"
 )
 
 func findUser(user *types.User) error {

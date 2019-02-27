@@ -2,6 +2,6 @@ FROM golang
 
 WORKDIR /app
 ADD . /app
-RUN go build ender.gr/directrd -o directrd
+RUN go build github.com/enderian.directrd -o directrd
 
 CMD directrd

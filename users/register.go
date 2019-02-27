@@ -1,8 +1,8 @@
-package directoryUsers
+package users
 
 import (
-	"ender.gr/directrd/types"
 	"github.com/Knetic/govaluate"
+	"github.com/enderian.directrd/types"
 )
 
 func autoRegister(user *types.User, identifier string) (err error) {

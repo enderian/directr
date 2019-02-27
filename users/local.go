@@ -1,8 +1,8 @@
-package directoryUsers
+package users
 
 import (
-	"ender.gr/directrd/types"
 	"errors"
+	"github.com/enderian.directrd/types"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 )

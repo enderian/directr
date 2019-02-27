@@ -1,8 +1,8 @@
-package directoryDelegation
+package delegation
 
 import (
 	"context"
-	"ender.gr/directrd/types"
+	"github.com/enderian.directrd/types"
 )
 
 var ctx context.Context

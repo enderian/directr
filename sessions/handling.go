@@ -1,8 +1,8 @@
 package sessions
 
 import (
-	"ender.gr/directrd/types"
 	"github.com/Knetic/govaluate"
+	"github.com/enderian.directrd/types"
 	"log"
 	"time"
 )

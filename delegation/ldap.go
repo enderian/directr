@@ -1,10 +1,10 @@
-package directoryDelegation
+package delegation
 
 import (
 	"crypto/tls"
-	"ender.gr/directrd/types"
 	"errors"
 	"fmt"
+	"github.com/enderian.directrd/types"
 	"gopkg.in/ldap.v3"
 	"strings"
 )

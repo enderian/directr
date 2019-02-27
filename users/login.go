@@ -1,9 +1,9 @@
-package directoryUsers
+package users
 
 import (
-	"ender.gr/directrd/delegation"
-	"ender.gr/directrd/sessions"
-	"ender.gr/directrd/types"
+	"github.com/enderian.directrd/delegation"
+	"github.com/enderian.directrd/sessions"
+	"github.com/enderian.directrd/types"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 )
@@ -17,7 +17,7 @@ func Login(username, password, identifier string) error {
 	for _, strategy := range conf.User.Authentication {
 		switch strategy {
 		case types.AuthenticationLDAP:
-			err = directoryDelegation.AuthenticateLdap(user, password)
+			err = delegation.AuthenticateLdap(user, password)
 			break
 		case types.AuthenticationCached:
 			err = authenticateLocal(*user, password, false)

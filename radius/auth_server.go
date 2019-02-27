@@ -1,7 +1,7 @@
-package directoryRadius
+package radius
 
 import (
-	"ender.gr/directrd/users"
+	"github.com/enderian.directrd/users"
 	"layeh.com/radius"
 	"layeh.com/radius/rfc2865"
 	"log"
@@ -15,7 +15,7 @@ func startAuthServer() {
 		identifier := rfc2865.NASIdentifier_GetString(r.Packet)
 
 		packet := r.Packet
-		if err := directoryUsers.Login(username, password, identifier); err == nil {
+		if err := users.Login(username, password, identifier); err == nil {
 			packet = r.Packet.Response(radius.CodeAccessAccept)
 		} else {
 			packet = r.Packet.Response(radius.CodeAccessReject)

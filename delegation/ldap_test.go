@@ -1,7 +1,7 @@
-package directoryDelegation
+package delegation
 
 import (
-	"ender.gr/directrd/types"
+	"github.com/enderian.directrd/types"
 	"testing"
 )
 

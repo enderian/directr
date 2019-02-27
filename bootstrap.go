@@ -1,13 +1,13 @@
 package main
 
 import (
-	"ender.gr/directrd/database"
-	"ender.gr/directrd/delegation"
-	"ender.gr/directrd/radius"
-	"ender.gr/directrd/sessions"
-	"ender.gr/directrd/types"
-	"ender.gr/directrd/users"
 	"fmt"
+	"github.com/enderian.directrd/database"
+	"github.com/enderian.directrd/delegation"
+	"github.com/enderian.directrd/radius"
+	"github.com/enderian.directrd/sessions"
+	"github.com/enderian.directrd/types"
+	"github.com/enderian.directrd/users"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
@@ -35,10 +35,10 @@ func main() {
 
 	//Start all the things
 	ctx := database.SetupDatabase(configuration)
-	directoryUsers.Setup(ctx, configuration)
-	directoryDelegation.Setup(ctx, configuration)
+	users.Setup(ctx, configuration)
+	delegation.Setup(ctx, configuration)
 	if configuration.Radius.SharedSecret != "" {
-		directoryRadius.Setup(ctx, configuration)
+		radius.Setup(ctx, configuration)
 	}
 	if configuration.User.Authorization {
 		sessions.Setup(ctx, configuration)
