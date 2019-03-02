@@ -9,6 +9,10 @@ import (
 
 func startAuthServer() {
 
+	if ctx.Conf().Radius.DisabledAuth {
+		return
+	}
+
 	handler := func(rw radius.ResponseWriter, r *radius.Request) {
 		username := rfc2865.UserName_GetString(r.Packet)
 		password := rfc2865.UserPassword_GetString(r.Packet)
@@ -27,12 +31,9 @@ func startAuthServer() {
 	}
 
 	server := radius.PacketServer{
-		Addr:         conf.Radius.AuthAddress,
+		Addr:         ":1812",
 		Handler:      radius.HandlerFunc(handler),
-		SecretSource: radius.StaticSecretSource([]byte(conf.Radius.SharedSecret)),
-	}
-	if server.Addr == "" {
-		server.Addr = ":1812"
+		SecretSource: radius.StaticSecretSource([]byte(ctx.Conf().Radius.SharedSecret)),
 	}
 
 	log.Printf("Starting RADIUS authentication server on %s", server.Addr)

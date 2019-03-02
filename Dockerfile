@@ -1,7 +1,13 @@
-FROM golang
+FROM golang:1.12
 
 WORKDIR /app
 ADD . /app
-RUN go build github.com/enderian/directrd -o directrd
+RUN CGO_ENABLED=0 GOOS=linux go build -a -ldflags="-w -s" -installsuffix cgo -o /app/directd .
 
-CMD directrd
+FROM alpine:latest
+
+WORKDIR /app
+RUN apk --no-cache add ca-certificates
+COPY --from=0 /app/directd /bin/directd
+
+CMD /bin/directd -config /app/config.yml

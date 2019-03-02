@@ -1,7 +1,10 @@
 package main
 
 import (
+	"context"
+	"flag"
 	"fmt"
+	"github.com/enderian/directrd/api"
 	"github.com/enderian/directrd/database"
 	"github.com/enderian/directrd/delegation"
 	"github.com/enderian/directrd/radius"
@@ -19,9 +22,14 @@ import (
 	"time"
 )
 
+var configFile = flag.String("config", "config.yml", "The configuration file.")
+
 func main() {
+
+	flag.Parse()
 	configuration := &types.Configuration{}
-	confBytes, err := ioutil.ReadFile("config.yml")
+	confBytes, err := ioutil.ReadFile(*configFile)
+
 	if err != nil {
 		log.Panic(err)
 	}
@@ -30,25 +38,25 @@ func main() {
 	}
 
 	//Setup the logger
-	log.SetOutput(&directrdLogWriter{folder: configuration.Logs})
+	logger := &directrdLogWriter{folder: configuration.Logs}
+	log.SetOutput(logger)
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 
 	//Start all the things
-	ctx := database.SetupDatabase(configuration)
-	users.Setup(ctx, configuration)
-	delegation.Setup(ctx, configuration)
-	if configuration.Radius.SharedSecret != "" {
-		radius.Setup(ctx, configuration)
-	}
-	if configuration.User.Authorization {
-		sessions.Setup(ctx, configuration)
-	}
+	ctx := types.NewContext(context.Background(), configuration, logger)
+	ctx = database.SetupDatabase(ctx)
+
+	users.Setup(ctx)
+	delegation.Setup(ctx)
+	api.Setup(ctx)
+	radius.Setup(ctx)
+	sessions.Setup(ctx)
 
 	//If shutdown signal received, exit gracefully.
-	ch := make(chan os.Signal)
-	signal.Notify(ch)
+	sign := make(chan os.Signal)
+	signal.Notify(sign)
 	for {
-		switch <-ch {
+		switch <-sign {
 		case syscall.SIGKILL:
 		case syscall.SIGTERM:
 		case syscall.SIGINT:

@@ -1,16 +1,16 @@
 package radius
 
 import (
-	"context"
 	"github.com/enderian/directrd/types"
 )
 
-var ctx context.Context
-var conf *types.Configuration
+var ctx types.Context
 
-func Setup(context context.Context, configuration *types.Configuration) {
-	conf = configuration
+func Setup(context types.Context) {
 	ctx = context
+	if ctx.Conf() == nil || ctx.Conf().Radius.SharedSecret == "" {
+		return
+	}
 	go startAuthServer()
 	go startAccServer()
 }

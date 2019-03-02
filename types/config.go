@@ -4,6 +4,7 @@ type Configuration struct {
 	Database string `yaml:"database"`
 	Logs     string `yaml:"logs"`
 
+	API    APIConfiguration    `yaml:"api"`
 	User   UserConfiguration   `yaml:"user"`
 	Radius RadiusConfiguration `yaml:"radius"`
 	LDAP   LdapConfiguration   `yaml:"ldap"`
@@ -15,7 +16,12 @@ const (
 	AuthenticationLDAP   AuthenticationStrategy = "ldap"
 	AuthenticationCached AuthenticationStrategy = "cached"
 	AuthenticationLocal  AuthenticationStrategy = "local"
+	AuthenticationOpSys  AuthenticationStrategy = "os"
 )
+
+type APIConfiguration struct {
+	Disabled bool `json:"disabled"`
+}
 
 type UserConfiguration struct {
 	Authentication []AuthenticationStrategy `yaml:"authentication"`
@@ -30,8 +36,8 @@ type UserConfiguration struct {
 }
 
 type RadiusConfiguration struct {
-	AuthAddress       string `yaml:"auth_address"`
-	AccountingAddress string `yaml:"accounting_address"`
+	DisabledAuth       bool `yaml:"disabled_auth"`
+	DisabledAccounting bool `yaml:"disabled_accounting"`
 
 	SharedSecret string `yaml:"shared_secret"`
 }

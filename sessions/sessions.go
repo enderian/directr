@@ -1,14 +1,11 @@
 package sessions
 
 import (
-	"context"
 	"github.com/enderian/directrd/types"
 )
 
-var ctx context.Context
-var conf *types.Configuration
+var ctx types.Context
 
-func Setup(context context.Context, configuration *types.Configuration) {
-	conf = configuration
+func Setup(context types.Context) {
 	ctx = context
 }

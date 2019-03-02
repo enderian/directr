@@ -13,11 +13,13 @@ const (
 )
 
 type Session struct {
-	Machine string `json:"machine"`
+	InternalId string `json:"internal_id" sql:",pk"`
+	SessionId  string `json:"account_id"`
 
+	Machine  string `json:"machine"`
 	Username string `json:"username"`
-	User     *User  `json:"user"`
+	User     *User  `json:"user" sql:"-"`
 
-	Status  SessionStatus `json:"status"`
+	Status  SessionStatus `json:"status,notnull"`
 	Expires time.Time     `json:"expires"`
 }

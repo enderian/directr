@@ -1,18 +1,19 @@
 package users
 
 import (
-	"errors"
 	"github.com/enderian/directrd/types"
 )
 
 func findUser(user *types.User) error {
-	return errors.New("user not found")
+	return ctx.DB().Model(user).Where("username = ?", user.Username).Select()
 }
 
 func updateUser(user *types.User) error {
-	return nil
+	_, err := ctx.DB().Model(user).Where("username = ?", user.Username).Update()
+	return err
 }
 
 func insertUser(user *types.User) error {
-	return nil
+	_, err := ctx.DB().Model(user).Insert()
+	return err
 }

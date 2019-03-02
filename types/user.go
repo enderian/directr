@@ -1,7 +1,7 @@
 package types
 
 type User struct {
-	Username    string `json:"username"`
+	Username    string `json:"username" sql:",pk"`
 	FullName    string `json:"full_name"`
 	Affiliation string `json:"affiliation"`
 

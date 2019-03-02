@@ -14,7 +14,7 @@ func Login(username, password, identifier string) error {
 	var err error
 
 	//Authenticate the user using the strategies provided.
-	for _, strategy := range conf.User.Authentication {
+	for _, strategy := range ctx.Conf().User.Authentication {
 		switch strategy {
 		case types.AuthenticationLDAP:
 			err = delegation.AuthenticateLdap(user, password)

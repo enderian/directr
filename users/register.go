@@ -6,7 +6,7 @@ import (
 )
 
 func autoRegister(user *types.User, identifier string) (err error) {
-	if !conf.User.AutoRegister {
+	if !ctx.Conf().User.AutoRegister {
 		return types.ErrorNotRegistered
 	}
 
@@ -17,11 +17,11 @@ func autoRegister(user *types.User, identifier string) (err error) {
 			err = insertUser(user)
 		}
 	}()
-	if conf.User.AutoRegisterRules == nil {
+	if ctx.Conf().User.AutoRegisterRules == nil {
 		return nil
 	}
 	//Check ALL THE RULES.
-	return conf.User.AutoRegisterRules.ExecuteRules(govaluate.MapParameters{
+	return ctx.Conf().User.AutoRegisterRules.ExecuteRules(govaluate.MapParameters{
 		"user":    user,
 		"machine": identifier,
 	})
