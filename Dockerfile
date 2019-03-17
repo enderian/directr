@@ -2,7 +2,7 @@ FROM golang:1.12
 
 WORKDIR /app
 ADD . /app
-RUN CGO_ENABLED=0 GOOS=linux go build -a -ldflags="-w -s" -installsuffix cgo -o /app/directd .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -ldflags="-w -s" -installsuffix cgo -o /app/directd bootstrap.go
 
 FROM alpine:latest
 
