@@ -1,5 +1,7 @@
 .idea
 *.iml
-*.yml
 /logs
+
+*.yml
 !.travis.yml
+!config.example.yml

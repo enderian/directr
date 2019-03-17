@@ -1,0 +1,33 @@
+api:
+  addr: :8080
+ldap:
+  address: ds.aueb.gr
+  port: 636
+  use_tls: true
+  base_dn: dc=aueb,dc=gr
+  # Replace with actual values.
+  bind_username: <username>
+  bind_password: <password>
+  search_class: eduPerson
+  username_attribute: uid
+  full_name_attribute: cn
+  affiliation_attribute: eduPersonPrimaryAffiliation
+  fix_full_name_case: true
+radius:
+  shared_secret: 123abc
+user:
+  authentication:
+    - ldap
+  auto_register: true
+  auto_register_rules:
+    - rule: "user.Affiliation == 'student' && !(user.Username =~ '^p3')"
+      block: true
+      error: Only CS students are allowed in the CSLabs!
+  authorization: true
+  authorization_rules:
+    - rule: "concurrent > 909"
+      block: true
+      error: Only one login is allowed at a time!
+# Replace with actual release.
+database: "psql://<username>:<password>@<host>:<port>/<database>"
+logs: logs
