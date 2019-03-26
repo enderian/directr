@@ -1,9 +1,12 @@
 package api
 
-import "github.com/kataras/iris"
+import (
+	"github.com/gin-gonic/gin"
+	"net/http"
+)
 
-func status(context iris.Context) {
-	_, _ = context.JSON(map[string]interface{}{
+func status(c *gin.Context) {
+	c.JSON(http.StatusOK, map[string]interface{}{
 		"name": "directrd REST API",
 	})
 }

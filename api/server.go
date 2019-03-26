@@ -1,8 +1,7 @@
 package api
 
 import (
-	"github.com/kataras/iris"
-	recoverMiddleware "github.com/kataras/iris/middleware/recover"
+	"github.com/gin-gonic/gin"
 	"log"
 )
 
@@ -12,16 +11,17 @@ func startApiServer() {
 		return
 	}
 
-	irs := iris.New()
-	irs.Use(recoverMiddleware.New())
-	irs.Logger().SetOutput(ctx.Logger())
+	engine := gin.New()
+	engine.GET("/status", status)
 
-	//TODO Define all the routes
-	api := irs.Party("/api")
-	api.Get("/", status)
+	api := engine.Group("/api")
+	api.GET("/", status)
+
+	terminals := api.Group("/terminal")
+	terminals.GET("/ws", terminalWebSocket)
 
 	log.Printf("Starting API server on %s", ":8080")
-	if err := irs.Run(iris.Addr(":8080")); err != nil {
+	if err := engine.Run(":8080"); err != nil {
 		log.Fatalf("Error while starting API server: %s", err.Error())
 	}
 }
