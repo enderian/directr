@@ -1,3 +1,5 @@
-directrd [![Build Status](https://travis-ci.com/enderian/directrd.svg?token=qbQDRsYW8zm8tB2DMrsx&branch=master)](https://travis-ci.com/enderian/directrd)
+directrd
 =====
-The directr service, originally created for the [AUEB CSLabs](https://cs.aueb.gr).
+The directr service, originally created for the [AUEB CSLabs](https://www.dept.aueb.gr).
+
+Instructions coming soon!
