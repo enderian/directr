@@ -3,6 +3,7 @@ package types
 import (
 	"context"
 	"github.com/go-pg/pg"
+	"github.com/go-redis/redis"
 	"io"
 	"time"
 )
@@ -10,6 +11,7 @@ import (
 const loggerContext = "logger"
 const confContext = "conf"
 const databaseContext = "db"
+const redisContext = "redis"
 
 type Context struct {
 	ctx context.Context //Actual enclosed context
@@ -21,6 +23,10 @@ func NewContext(ctx context.Context, conf *Configuration, logger io.Writer) Cont
 
 func NewContextWithDB(ctx context.Context, db *pg.DB) Context {
 	return Context{context.WithValue(ctx, databaseContext, db)}
+}
+
+func NewContextWithRedis(ctx context.Context, red *redis.Client) Context {
+	return Context{context.WithValue(ctx, redisContext, red)}
 }
 
 func (c Context) Deadline() (deadline time.Time, ok bool) {
@@ -45,6 +51,10 @@ func (c Context) Conf() *Configuration {
 
 func (c Context) DB() *pg.DB {
 	return c.ctx.Value(databaseContext).(*pg.DB)
+}
+
+func (c Context) Redis() *redis.Client {
+	return c.ctx.Value(redisContext).(*redis.Client)
 }
 
 func (c Context) Logger() io.Writer {

@@ -11,17 +11,18 @@ func startApiServer() {
 		return
 	}
 
+	gin.SetMode(gin.ReleaseMode)
 	engine := gin.New()
+	engine.Use(gin.Recovery())
+
 	engine.GET("/status", status)
 
 	api := engine.Group("/api")
-	api.GET("/", status)
+	usersGroup(api.Group("/users"))
+	terminalsGroup(api.Group("/terminal"))
 
-	terminals := api.Group("/terminal")
-	terminals.GET("/ws", terminalWebSocket)
-
-	log.Printf("Starting API server on %s", ":8080")
-	if err := engine.Run(":8080"); err != nil {
+	log.Printf("Starting API server on %s", ctx.Conf().API.RestAddr)
+	if err := engine.Run(ctx.Conf().API.RestAddr); err != nil {
 		log.Fatalf("Error while starting API server: %s", err.Error())
 	}
 }

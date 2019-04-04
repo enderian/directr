@@ -1,15 +1,34 @@
 package agent
 
 import (
+	"github.com/codegangsta/cli"
 	"github.com/enderian/directrd/types"
-	"github.com/gorilla/websocket"
+	"github.com/golang/protobuf/proto"
 	"github.com/kardianos/service"
-	"net/url"
-	"os"
+	"log"
+	"net"
 )
 
 type Agent struct {
 	Logger service.Logger
+}
+
+func Setup(_ *cli.Context) error {
+	svcConfig := &service.Config{
+		Name:        "directrd agent service",
+		DisplayName: "directrd agent service",
+	}
+
+	prg := &Agent{}
+	s, err := service.New(prg, svcConfig)
+	if err != nil {
+		log.Fatal(err)
+	}
+	prg.Logger, err = s.Logger(nil)
+	if err != nil {
+		return err
+	}
+	return s.Run()
 }
 
 func (agent *Agent) Start(s service.Service) error {
@@ -22,44 +41,25 @@ func (agent *Agent) Stop(s service.Service) error {
 }
 
 func (agent *Agent) run() {
-
-	addr := "localhost:8080"
-	u := url.URL{Scheme: "ws", Host: addr, Path: "/api/terminal/ws"}
-	_ = agent.Logger.Info("Connecting to %s", u.String())
-
-	conn, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
-	if err != nil {
-		_ = agent.Logger.Errorf("Error while connecting to WebSocket: %s", err)
-		return
+	addr := &net.UDPAddr{
+		Port: 12056,
 	}
-	defer func() {
-		_ = conn.Close()
-		_ = agent.Logger.Error("Service terminated.")
-	}()
-
-	hostname, err := os.Hostname()
+	conn, err := net.DialUDP("udp", nil, addr)
 	if err != nil {
-		_ = agent.Logger.Errorf("Error while retrieving hostname: %s", err)
-		return
+		log.Panicf("failed to initialize internal listener: %v", err)
 	}
-	_ = conn.WriteJSON(&types.Terminal{
-		Hostname: hostname,
-	})
 
-	cmd := &types.Command{}
-	for {
-		err := conn.ReadJSON(cmd)
-		if err != nil {
-			_ = agent.Logger.Errorf("Error while parsing incoming command: %s", err)
-			return
-		}
-		switch cmd.Type {
-		case types.CommandLogout:
-			logout(cmd.Arguments[0])
-		case types.CommandRestart:
-			restart()
-		case types.CommandShutdown:
-			shutdown()
-		}
+	event := &types.Event{
+		Terminal: "cslab-12",
+		Scope:    types.Event_Terminal,
+		Type:     types.Event_KeepAlive,
+	}
+
+	msg, err := proto.Marshal(event)
+	if err != nil {
+		_ = agent.Logger.Error(err)
+	}
+	if _, err = conn.Write(msg); err != nil {
+		_ = agent.Logger.Error(err)
 	}
 }

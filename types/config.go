@@ -2,6 +2,7 @@ package types
 
 type Configuration struct {
 	Database string `yaml:"database"`
+	Redis    string `yaml:"redis"`
 	Logs     string `yaml:"logs"`
 
 	API    APIConfiguration    `yaml:"api"`
@@ -20,7 +21,10 @@ const (
 )
 
 type APIConfiguration struct {
-	Disabled bool `json:"disabled"`
+	Disabled bool `yaml:"disabled"`
+
+	RestAddr    string `yaml:"rest_addr"`
+	ServiceAddr string `yaml:"service_addr"`
 }
 
 type UserConfiguration struct {

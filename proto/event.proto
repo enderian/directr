@@ -1,0 +1,21 @@
+syntax="proto3";
+option go_package = "types";
+
+message Event {
+
+    enum Scope {
+        Terminal = 0;
+    }
+
+    enum Type {
+        KeepAlive = 0;
+
+        SessionStarting = 1;
+        SessionStart = 2;
+        SessionEnd = 3;
+    }
+
+    Scope scope = 1;
+    Type type = 2;
+    string terminal = 3;
+}

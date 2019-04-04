@@ -2,10 +2,12 @@ module github.com/enderian/directrd
 
 require (
 	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible
+	github.com/codegangsta/cli v1.20.0
 	github.com/gin-contrib/sse v0.0.0-20190301062529-5545eab6dad3 // indirect
 	github.com/gin-gonic/gin v1.3.0
 	github.com/go-pg/pg v8.0.1+incompatible
-	github.com/golang/protobuf v1.3.0 // indirect
+	github.com/go-redis/redis v6.15.2+incompatible
+	github.com/golang/protobuf v1.3.0
 	github.com/gorilla/websocket v1.4.0
 	github.com/iris-contrib/go.uuid v2.0.0+incompatible
 	github.com/jinzhu/inflection v0.0.0-20180308033659-04140366298a // indirect
@@ -16,7 +18,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/onsi/ginkgo v1.7.0 // indirect
 	github.com/onsi/gomega v1.4.3 // indirect
-	github.com/stretchr/testify v1.3.0 // indirect
+	github.com/soniah/gosnmp v1.20.0
 	github.com/ugorji/go/codec v0.0.0-20190320090025-2dc34c0b8780 // indirect
 	golang.org/x/crypto v0.0.0-20190225124518-7f87c0fbb88b
 	golang.org/x/net v0.0.0-20181220203305-927f97764cc3 // indirect

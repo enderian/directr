@@ -5,9 +5,12 @@ import (
 )
 
 var ctx types.Context
-var event = make(chan types.Event)
+var commandQueue = make(chan types.Command)
 
 func Setup(context types.Context) {
 	ctx = context
+
 	go startApiServer()
+	go startInternal()
+	go startInternalOutgoing()
 }
