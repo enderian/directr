@@ -13,8 +13,6 @@ import (
 	"github.com/enderian/directrd/terminals"
 	"github.com/enderian/directrd/types"
 	"github.com/enderian/directrd/users"
-	"gopkg.in/yaml.v2"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
@@ -27,14 +25,9 @@ import (
 func Setup(c *cli.Context) error {
 
 	flag.Parse()
-	configuration := &types.Configuration{}
-	confBytes, err := ioutil.ReadFile(c.String("config"))
-
+	configuration, err := types.LoadConfiguration(c)
 	if err != nil {
-		return err
-	}
-	if err := yaml.Unmarshal(confBytes, configuration); err != nil {
-		return err
+		log.Fatalf("failed to load configuration: %v", err)
 	}
 
 	//Setup the logger

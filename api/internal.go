@@ -1,7 +1,6 @@
 package api
 
 import (
-	"bufio"
 	"github.com/enderian/directrd/terminals"
 	"github.com/enderian/directrd/types"
 	"github.com/golang/protobuf/proto"
@@ -21,15 +20,17 @@ func startInternal() {
 		log.Panicf("failed to initialize internal listener: %v", err)
 	}
 
-	writer := bufio.NewReader(listener)
-	byt := make([]byte, 1024)
+	buf := make([]byte, 2048)
 	for {
-		num, err := writer.Read(byt)
+		length, err := listener.Read(buf)
 		if err != nil {
-			return
+			log.Printf("failed while reading bytes: %v", err)
+			continue
 		}
+
 		event := &types.Event{}
-		if err = proto.Unmarshal(byt[:num], event); err != nil {
+		if err = proto.Unmarshal(buf[:length], event); err != nil {
+			log.Printf("failed while parsing bytes: %v", err)
 			log.Println(err)
 			continue
 		}

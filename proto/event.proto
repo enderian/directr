@@ -9,10 +9,12 @@ message Event {
 
     enum Type {
         KeepAlive = 0;
+        Greetings = 1;
+        Goodbye = 2;
 
-        SessionStarting = 1;
-        SessionStart = 2;
-        SessionEnd = 3;
+        SessionStarting = 5;
+        SessionStart = 6;
+        SessionEnd = 7;
     }
 
     Scope scope = 1;

@@ -17,7 +17,7 @@ const (
 	AuthenticationLDAP   AuthenticationStrategy = "ldap"
 	AuthenticationCached AuthenticationStrategy = "cached"
 	AuthenticationLocal  AuthenticationStrategy = "local"
-	AuthenticationOpSys  AuthenticationStrategy = "os"
+	AuthenticationOp     AuthenticationStrategy = "os"
 )
 
 type APIConfiguration struct {

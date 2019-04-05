@@ -3,17 +3,18 @@ package agent
 import (
 	"github.com/codegangsta/cli"
 	"github.com/enderian/directrd/types"
-	"github.com/golang/protobuf/proto"
 	"github.com/kardianos/service"
 	"log"
-	"net"
+	"os"
 )
 
 type Agent struct {
-	Logger service.Logger
+	hostname string
+	config   *types.Configuration
+	logger   service.Logger
 }
 
-func Setup(_ *cli.Context) error {
+func Setup(c *cli.Context) error {
 	svcConfig := &service.Config{
 		Name:        "directrd agent service",
 		DisplayName: "directrd agent service",
@@ -24,42 +25,42 @@ func Setup(_ *cli.Context) error {
 	if err != nil {
 		log.Fatal(err)
 	}
-	prg.Logger, err = s.Logger(nil)
+	prg.logger, err = s.Logger(nil)
 	if err != nil {
 		return err
 	}
+
+	if conf, err := types.LoadConfiguration(c); err == nil {
+		prg.config = conf
+	} else {
+		_ = prg.logger.Errorf("failed to load configuration: $v", err)
+		return err
+	}
+
 	return s.Run()
 }
 
 func (agent *Agent) Start(s service.Service) error {
+	_ = agent.logger.Info("directrd agent starting")
+
 	go agent.run()
+
 	return nil
 }
 
 func (agent *Agent) Stop(s service.Service) error {
+	_ = agent.logger.Info("directrd agent stopping")
+	agent.goingDown()
 	return nil
 }
 
 func (agent *Agent) run() {
-	addr := &net.UDPAddr{
-		Port: 12056,
-	}
-	conn, err := net.DialUDP("udp", nil, addr)
-	if err != nil {
-		log.Panicf("failed to initialize internal listener: %v", err)
-	}
-
-	event := &types.Event{
-		Terminal: "cslab-12",
-		Scope:    types.Event_Terminal,
-		Type:     types.Event_KeepAlive,
+	if hostname, err := os.Hostname(); err == nil {
+		agent.hostname = hostname
+	} else {
+		_ = agent.logger.Errorf("unable to retrieve machines hostname: $v", err)
+		return
 	}
 
-	msg, err := proto.Marshal(event)
-	if err != nil {
-		_ = agent.Logger.Error(err)
-	}
-	if _, err = conn.Write(msg); err != nil {
-		_ = agent.Logger.Error(err)
-	}
+	go agent.runKeepAlive()
 }

@@ -4,8 +4,6 @@ option go_package = "types";
 message Command {
     string terminal = 1;
 
-
-
     string command = 3;
     repeated string arguments = 4;
 }
