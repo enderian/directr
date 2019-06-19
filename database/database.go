@@ -16,6 +16,7 @@ func SetupDatabase(ctx types.Context) types.Context {
 	if tx, err := db.Begin(); err == nil {
 		_ = tx.CreateTable((*types.User)(nil), &orm.CreateTableOptions{IfNotExists: true})
 		_ = tx.CreateTable((*types.Session)(nil), &orm.CreateTableOptions{IfNotExists: true})
+		_ = tx.CreateTable((*types.Terminal)(nil), &orm.CreateTableOptions{IfNotExists: true})
 		_ = tx.Commit()
 	} else {
 		log.Fatalf("Failed to connect to Postgres: %s", err.Error())

@@ -42,9 +42,7 @@ func Setup(c *cli.Context) error {
 
 func (agent *Agent) Start(s service.Service) error {
 	_ = agent.logger.Info("directrd agent starting")
-
 	go agent.run()
-
 	return nil
 }
 
@@ -61,6 +59,6 @@ func (agent *Agent) run() {
 		_ = agent.logger.Errorf("unable to retrieve machines hostname: $v", err)
 		return
 	}
-
 	go agent.runKeepAlive()
+	go agent.runCommandReceiver()
 }
