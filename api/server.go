@@ -1,7 +1,8 @@
 package api
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 	"log"
 )
 
@@ -11,9 +12,8 @@ func startApiServer() {
 		return
 	}
 
-	gin.SetMode(gin.ReleaseMode)
-	engine := gin.New()
-	engine.Use(gin.Recovery())
+	engine := echo.New()
+	engine.Use(middleware.Recover())
 
 	engine.GET("/status", status)
 
@@ -22,7 +22,7 @@ func startApiServer() {
 	terminalsGroup(api.Group("/terminal"))
 
 	log.Printf("Starting API server on %s", ctx.Conf().API.RestAddr)
-	if err := engine.Run(ctx.Conf().API.RestAddr); err != nil {
+	if err := engine.Start(ctx.Conf().API.RestAddr); err != nil {
 		log.Fatalf("Error while starting API server: %s", err.Error())
 	}
 }

@@ -1,7 +1,7 @@
 package api
 
-import "github.com/gin-gonic/gin"
+import "github.com/labstack/echo"
 
-func usersGroup(group *gin.RouterGroup) {
+func usersGroup(group *echo.Group) {
 
 }

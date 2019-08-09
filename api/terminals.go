@@ -1,9 +1,9 @@
 package api
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo"
 )
 
-func terminalsGroup(group *gin.RouterGroup) {
+func terminalsGroup(group *echo.Group) {
 
 }

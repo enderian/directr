@@ -1,12 +1,12 @@
 package api
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo"
 	"net/http"
 )
 
-func status(c *gin.Context) {
-	c.JSON(http.StatusOK, map[string]interface{}{
+func status(c echo.Context) error {
+	return c.JSON(http.StatusOK, map[string]interface{}{
 		"name": "directrd REST API",
 	})
 }
