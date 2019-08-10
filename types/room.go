@@ -1,11 +1,7 @@
 package types
 
-import (
-	"github.com/jinzhu/gorm"
-)
-
 type Room struct {
-	gorm.Model
+	model
 
 	Name string `json:"name"`
 }

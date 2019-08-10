@@ -1,13 +1,12 @@
 package types
 
 import (
-	"github.com/jinzhu/gorm"
 	"github.com/jinzhu/gorm/dialects/postgres"
 )
 
 type User struct {
-	gorm.Model
-	
+	model
+
 	Username    string `json:"username" sql:",pk"`
 	FullName    string `json:"full_name"`
 	Affiliation string `json:"affiliation"`

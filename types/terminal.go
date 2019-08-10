@@ -2,7 +2,6 @@ package types
 
 import (
 	"fmt"
-	"github.com/jinzhu/gorm"
 	"time"
 )
 
@@ -17,13 +16,13 @@ const (
 )
 
 type Terminal struct {
-	gorm.Model
+	model
 
 	Name     string `json:"name" gorm:"primary_key"`
 	Hostname string `json:"hostname"`
 
-	RoomID          uint   `json:"-"`
-	Room            Room   `json:"room"`
+	RoomID          uint   `json:"room_id"`
+	Room            Room   `json:"-"`
 	PositionX       uint   `json:"pos_x"`
 	PositionY       uint   `json:"pos_y"`
 	OperatingSystem string `json:"operating_system"`

@@ -1,7 +1,6 @@
 package types
 
 import (
-	"github.com/jinzhu/gorm"
 	"time"
 )
 
@@ -14,7 +13,7 @@ const (
 )
 
 type Session struct {
-	gorm.Model
+	model
 
 	InternalId string `json:"internal_id" gorm:"primary_key"`
 	SessionId  string `json:"account_id"`
