@@ -7,7 +7,6 @@ var commandQueue chan types.Command
 
 func Setup(context types.Context) {
 	ctx = context
-	go setupRedisSubscriber()
 	go loadTerminals()
 }
 

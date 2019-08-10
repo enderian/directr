@@ -39,6 +39,7 @@ func Setup(c *cli.Context) error {
 	ctx = database.SetupDatabase(ctx)
 	ctx = database.SetupRedis(ctx)
 
+	types.Setup(ctx)
 	users.Setup(ctx)
 	terminals.Setup(ctx)
 

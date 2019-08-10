@@ -2,7 +2,7 @@ language: go
 install: true
 services:
   - docker
-before_install:
-  - docker build -t enderian/directrd .
+script:
+  - make test
 env:
   - GO111MODULE=on

@@ -5,9 +5,6 @@ import (
 	"log"
 )
 
-const redisTerminalKey = "ender.directrd.terminal.%s"
-const redisTerminalKeyAlive = "ender.directrd.terminal.%s.alive"
-
 func loadTerminals() {
 	var terminals []*types.Terminal
 	if err := ctx.DB().Find(&terminals).Error; err != nil {

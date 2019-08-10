@@ -29,5 +29,5 @@ user:
       block: true
       error: Only one login is allowed at a time!
 # Replace with actual release.
-database: "psql://<username>:<password>@<host>:<port>/<database>"
+database: "postgres://<username>:<password>@<host>:<port>/<database>"
 logs: logs
