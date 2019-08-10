@@ -14,7 +14,7 @@ func autoRegister(user *types.User, identifier string) (err error) {
 	defer func() {
 		if err == nil {
 			//Insert the user if all else went well!
-			err = insertUser(user)
+			err = ctx.DB().Create(user).Error
 		}
 	}()
 	if ctx.Conf().User.AutoRegisterRules == nil {

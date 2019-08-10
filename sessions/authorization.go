@@ -29,13 +29,13 @@ func Authorize(user *types.User, machine string) error {
 		}
 	}
 
-	if err := insertSession(&types.Session{
+	if err := ctx.DB().Create(&types.Session{
 		InternalId: uuid.Must(uuid.NewV4()).String(),
 		Username:   user.Username,
 		Machine:    machine,
 		Expires:    time.Now().Add(time.Minute * 5),
-	}); err != nil {
-		log.Printf("Error while creating session: %s", err.Error())
+	}).Error; err != nil {
+		log.Printf("Error while creating session: %s", err)
 		return err
 	}
 
@@ -51,19 +51,19 @@ func Start(sessionId string, username string, machine string) error {
 	if err := findSession(session); err == nil && session.Username == username {
 		session.SessionId = sessionId
 		session.Status = types.SessionStarted
-		if err := updateSession(session); err != nil {
+		if err := ctx.DB().Save(session).Error; err != nil {
 			log.Printf("Error while updating session whilst starting: %s", err.Error())
 			return err
 		}
 	} else {
-		if err := insertSession(&types.Session{
+		if err := ctx.DB().Create(&types.Session{
 			InternalId: uuid.Must(uuid.NewV4()).String(),
 			SessionId:  sessionId,
 			Username:   username,
 			Machine:    machine,
 			Expires:    time.Now().Add(time.Minute * 5),
-		}); err != nil {
-			log.Printf("Error while creating session whilst starting: %s", err.Error())
+		}).Error; err != nil {
+			log.Printf("Error while creating session whilst starting: %s", err)
 			return err
 		}
 	}
@@ -78,20 +78,20 @@ func Update(sessionId string, username string, machine string) error {
 	session := &types.Session{SessionId: sessionId}
 	if err := findSession(session); err == nil && session.Username == username {
 		session.Expires = time.Now().Add(time.Minute * 3)
-		if err := updateSession(session); err != nil {
-			log.Printf("Error while updating session whilst updating: %s", err.Error())
+		if err := ctx.DB().Save(session).Error; err != nil {
+			log.Printf("Error while updating session whilst updating: %s", err)
 			return err
 		}
 	} else {
-		if err := insertSession(&types.Session{
+		if err := ctx.DB().Create(&types.Session{
 			InternalId: uuid.Must(uuid.NewV4()).String(),
 			SessionId:  sessionId,
 			Username:   username,
 			Machine:    machine,
 			Status:     types.SessionStarted,
 			Expires:    time.Now().Add(time.Minute * 3),
-		}); err != nil {
-			log.Printf("Error while creating session whilst updating: %s", err.Error())
+		}).Error; err != nil {
+			log.Printf("Error while creating session whilst updating: %s", err)
 			return err
 		}
 	}
@@ -106,8 +106,8 @@ func End(sessionId string, username string, machine string) error {
 	session := &types.Session{SessionId: sessionId}
 	if err := findSession(session); err == nil {
 		session.Status = types.SessionEnded
-		if err := updateSession(session); err != nil {
-			log.Printf("Error while updating session whilst completing: %s", err.Error())
+		if err := ctx.DB().Save(session).Error; err != nil {
+			log.Printf("Error while updating session whilst completing: %s", err)
 			return err
 		}
 	}

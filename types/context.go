@@ -2,7 +2,7 @@ package types
 
 import (
 	"context"
-	"github.com/go-pg/pg"
+	"github.com/jinzhu/gorm"
 	"github.com/go-redis/redis"
 	"io"
 	"time"
@@ -21,7 +21,7 @@ func NewContext(ctx context.Context, conf *Configuration, logger io.Writer) Cont
 	return Context{context.WithValue(context.WithValue(ctx, loggerContext, logger), confContext, conf)}
 }
 
-func NewContextWithDB(ctx context.Context, db *pg.DB) Context {
+func NewContextWithDB(ctx context.Context, db *gorm.DB) Context {
 	return Context{context.WithValue(ctx, databaseContext, db)}
 }
 
@@ -49,8 +49,8 @@ func (c Context) Conf() *Configuration {
 	return c.ctx.Value(confContext).(*Configuration)
 }
 
-func (c Context) DB() *pg.DB {
-	return c.ctx.Value(databaseContext).(*pg.DB)
+func (c Context) DB() *gorm.DB {
+	return c.ctx.Value(databaseContext).(*gorm.DB)
 }
 
 func (c Context) Redis() *redis.Client {

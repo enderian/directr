@@ -10,7 +10,8 @@ import (
 func Update(event *types.Event) {
 	log.Printf("updated: %v, %v", event.Terminal, event.Type)
 
-	terminal, err := findTerminal(event.Terminal)
+	var terminal = &types.Terminal{}
+	err := ctx.DB().Where("name = ?", event.Terminal).Find(terminal)
 	if err != nil {
 		log.Printf("terminal attempted to connect but does not exist: %v: %v", event.Terminal, err)
 		return

@@ -1,6 +1,13 @@
 package types
 
+import (
+	"github.com/jinzhu/gorm"
+	"github.com/jinzhu/gorm/dialects/postgres"
+)
+
 type User struct {
+	gorm.Model
+	
 	Username    string `json:"username" sql:",pk"`
 	FullName    string `json:"full_name"`
 	Affiliation string `json:"affiliation"`
@@ -10,5 +17,5 @@ type User struct {
 	Local    bool   `json:"local"`
 	Password []byte `json:"password"`
 
-	Extras map[string]string `json:"extras"`
+	Extras postgres.Hstore `json:"extras"`
 }

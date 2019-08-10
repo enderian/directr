@@ -1,28 +1,21 @@
 package database
 
 import (
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/enderian/directrd/types"
-	"github.com/go-pg/pg"
-	"github.com/go-pg/pg/orm"
 	"log"
 )
 
 func SetupDatabase(ctx types.Context) types.Context {
-	opts, err := pg.ParseURL(ctx.Conf().Database)
+	db, err := gorm.Open("postgres", ctx.Conf().Database)
 	if err != nil {
-		log.Fatalf("Failed to parse Postgres URL: %s", err.Error())
-	}
-	db := pg.Connect(opts)
-	if tx, err := db.Begin(); err == nil {
-		_ = tx.CreateTable((*types.User)(nil), &orm.CreateTableOptions{IfNotExists: true})
-		_ = tx.CreateTable((*types.Session)(nil), &orm.CreateTableOptions{IfNotExists: true})
-		_ = tx.CreateTable((*types.Terminal)(nil), &orm.CreateTableOptions{IfNotExists: true})
-		_ = tx.Commit()
-	} else {
 		log.Fatalf("Failed to connect to Postgres: %s", err.Error())
 	}
 
-	log.Printf("Connected to Postgres database %s@%s successfully!", opts.Database, opts.Addr)
+	db.AutoMigrate(&types.Session{}, &types.Terminal{}, &types.User{})
+
+	log.Printf("Connected to Postgres database successfully!")
 	return types.NewContextWithDB(ctx, db)
 }
 

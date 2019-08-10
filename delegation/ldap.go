@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
+	"github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/enderian/directrd/types"
 	"gopkg.in/ldap.v3"
 	"strings"
@@ -87,7 +88,7 @@ func FillLdap(user *types.User) error {
 		return errors.New("user does not exist or too many entries returned")
 	}
 	if ctx.Conf().LDAP.ExtraAttributes != nil {
-		user.Extras = make(map[string]string)
+		user.Extras = postgres.Hstore{}
 	}
 
 	user.DN = sr.Entries[0].DN
@@ -109,7 +110,7 @@ func FillLdap(user *types.User) error {
 			{
 				if ctx.Conf().LDAP.ExtraAttributes != nil {
 					if extName, ok := ctx.Conf().LDAP.ExtraAttributes[entry.Name]; ok {
-						user.Extras[extName] = entry.Values[0]
+						user.Extras[extName] = &entry.Values[0]
 					}
 				}
 			}
