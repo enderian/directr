@@ -21,8 +21,9 @@ type Terminal struct {
 	Name     string `json:"name" gorm:"primary_key"`
 	Hostname string `json:"hostname"`
 
-	RoomID          uint   `json:"room_id"`
-	Room            Room   `json:"-"`
+	RoomID uint `json:"room_id"`
+	Room   Room `json:"-"`
+
 	PositionX       uint   `json:"pos_x"`
 	PositionY       uint   `json:"pos_y"`
 	OperatingSystem string `json:"operating_system"`
@@ -32,12 +33,19 @@ type Terminal struct {
 
 const statusKey = "directrd.terminal.%s.status"
 
+func (t *Terminal) SaveStatus() {
+	_, err := ctx.Redis().Set(fmt.Sprintf(statusKey, t.Name), string(t.Status), time.Second*5).Result()
+	if err != nil {
+		panic(err)
+	}
+}
+
 /* These are GORM hooks, see here:
    http://gorm.io/docs/hooks.html  */
 
 func (t *Terminal) AfterFind() error {
-	if res := ctx.Redis().Get(fmt.Sprintf(statusKey, t.Name)); res.Err() == nil {
-		t.Status = Status(res.Val())
+	if res, err := ctx.Redis().Get(fmt.Sprintf(statusKey, t.Name)).Result(); err == nil {
+		t.Status = Status(res)
 	} else {
 		t.Status = StatusOffline
 	}
@@ -45,6 +53,6 @@ func (t *Terminal) AfterFind() error {
 }
 
 func (t *Terminal) BeforeSave() error {
-	ctx.Redis().Set(fmt.Sprintf(statusKey, t.Name), t.Status, time.Hour*1)
+	t.SaveStatus()
 	return nil
 }

@@ -1,24 +1,27 @@
 package terminals
 
 import (
-	"github.com/enderian/directrd/types"
 	"log"
+
+	"github.com/enderian/directrd/types"
 )
 
 func Update(event *types.Event) {
-	log.Printf("updated: %v, %v", event.Terminal, event.Type)
 
 	var terminal = &types.Terminal{}
-	err := ctx.DB().Where("name = ?", event.Terminal).Find(terminal)
-	if err != nil {
+	if err := ctx.DB().Where("hostname = ?", event.Terminal).Find(terminal).Error; err != nil {
 		log.Printf("terminal attempted to connect but does not exist: %v: %v", event.Terminal, err)
 		return
 	}
 
 	switch event.Type {
 	case types.Event_KeepAlive:
-		
+		if terminal.Status == types.StatusOffline {
+			terminal.Status = types.StatusOnline
+			terminal.SaveStatus()
+		}
 	case types.Event_Goodbye:
-		
+		terminal.Status = types.StatusOffline
+		ctx.DB().Update(terminal)
 	}
 }
