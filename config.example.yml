@@ -1,5 +1,5 @@
 api:
-  addr: :8080
+  rest_addr: :8080
 ldap:
   address: ds.aueb.gr
   port: 636
