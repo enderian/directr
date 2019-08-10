@@ -12,17 +12,19 @@ func startApiServer() {
 		return
 	}
 
-	engine := echo.New()
-	engine.Use(middleware.Recover())
+	e := echo.New()
+	e.HideBanner = true
+	e.HidePort = true
 
-	engine.GET("/status", status)
+	e.Use(middleware.Recover())
+	e.GET("/status", status)
 
-	api := engine.Group("/api")
+	api := e.Group("/api")
 	usersGroup(api.Group("/users"))
 	terminalsGroup(api.Group("/terminal"))
 
 	log.Printf("Starting API server on %s", ctx.Conf().API.RestAddr)
-	if err := engine.Start(ctx.Conf().API.RestAddr); err != nil {
+	if err := e.Start(ctx.Conf().API.RestAddr); err != nil {
 		log.Fatalf("Error while starting API server: %s", err.Error())
 	}
 }

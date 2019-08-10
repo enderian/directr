@@ -2,6 +2,6 @@ package api
 
 import "github.com/labstack/echo"
 
-func usersGroup(group *echo.Group) {
+func usersGroup(g *echo.Group) {
 
 }
