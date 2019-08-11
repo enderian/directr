@@ -1,11 +1,12 @@
 package api
 
 import (
+	"log"
+	"net"
+
 	"github.com/enderian/directrd/terminals"
 	"github.com/enderian/directrd/types"
 	"github.com/golang/protobuf/proto"
-	"log"
-	"net"
 )
 
 func startInternal() {
@@ -22,7 +23,7 @@ func startInternal() {
 
 	buf := make([]byte, 2048)
 	for {
-		length, err := listener.Read(buf)
+		length, addr, err := listener.ReadFrom(buf)
 		if err != nil {
 			log.Printf("failed while reading bytes: %v", err)
 			continue
@@ -37,16 +38,7 @@ func startInternal() {
 
 		switch event.Scope {
 		case types.Event_Terminal:
-			terminals.Update(event)
+			terminals.Event(event, addr)
 		}
-	}
-}
-
-func startInternalOutgoing() {
-	terminals.SetupQueue(commandQueue)
-
-	for {
-		cmd := <-commandQueue
-		_ = cmd //FIXME Send to corresponding terminal!
 	}
 }

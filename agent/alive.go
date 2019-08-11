@@ -1,27 +1,52 @@
 package agent
 
 import (
+	"fmt"
+	"log"
+	"runtime"
+	"time"
+
 	"github.com/enderian/directrd/types"
 	"github.com/golang/protobuf/proto"
-	"time"
 )
 
-func (agent *Agent) runKeepAlive() {
-	conn := agent.outgoingUDP()
+func greet() {
+	conn := outgoingUDP()
+
+	event := &types.Event{
+		Terminal: hostname,
+		Scope:    types.Event_Terminal,
+		Type:     types.Event_Greetings,
+		Data: map[string]string{
+			"os": runtime.GOOS,
+		},
+	}
+
+	msg, err := proto.Marshal(event)
+	if err != nil {
+		log.Fatalf("failed on marshaling greeting: %v", err)
+	}
+	if _, err = conn.Write(msg); err != nil {
+		log.Fatalf("failed on sending greeting: %v", err)
+	}
+}
+
+func runKeepAlive() {
+	conn := outgoingUDP()
 
 	for {
 		event := &types.Event{
-			Terminal: agent.hostname,
+			Terminal: hostname,
 			Scope:    types.Event_Terminal,
 			Type:     types.Event_KeepAlive,
 		}
 
 		msg, err := proto.Marshal(event)
 		if err != nil {
-			panic(err)
+			log.Fatalf("failed on marshaling keep_alive: %v", err)
 		}
 		if _, err = conn.Write(msg); err != nil {
-			_ = agent.logger.Errorf("failed on sending keep_alive: %v", err)
+			log.Printf("failed on sending keep_alive: %v", err)
 			continue
 		}
 
@@ -29,21 +54,21 @@ func (agent *Agent) runKeepAlive() {
 	}
 }
 
-func (agent *Agent) goingDown() {
+func goingDown() error {
 
 	event := &types.Event{
-		Terminal: agent.hostname,
+		Terminal: hostname,
 		Scope:    types.Event_Terminal,
 		Type:     types.Event_Goodbye,
 	}
 
 	msg, err := proto.Marshal(event)
 	if err != nil {
-		panic(err)
+		return err
 	}
-	conn := agent.outgoingUDP()
+	conn := outgoingUDP()
 	if _, err = conn.Write(msg); err != nil {
-		_ = agent.logger.Errorf("failed on sending goodbye: %v", err)
+		return fmt.Errorf("failed on sending goodbye: %v", err)
 	}
-
+	return nil
 }

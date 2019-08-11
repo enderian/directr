@@ -1,31 +1,35 @@
 package agent
 
 import (
-	"fmt"
+	"os"
+	"os/exec"
+
 	"github.com/enderian/directrd/types"
 	"github.com/golang/protobuf/proto"
 )
 
-func (agent *Agent) runCommandReceiver() {
-	conn := agent.incomingUDP()
+func runCommandReceiver() {
+	conn := incomingUDP()
 	byt := make([]byte, 2048)
 
 	for {
 		length, err := conn.Read(byt)
 		if err != nil {
-			_ = agent.logger.Error(err)
+			logger.Errorf("error while reading command: %v", err)
 			return
 		}
 
-		cmd := &types.Command{}
-		err = proto.Unmarshal(byt[:length], cmd)
+		incoming := &types.Command{}
+		err = proto.Unmarshal(byt[:length], incoming)
 		if err != nil {
-			_ = agent.logger.Error(err)
-		}
-		if cmd.Terminal != agent.hostname {
-			continue
+			logger.Errorf("error while reading command: %v", err)
 		}
 
-		fmt.Println(cmd.Command)
+		cmd := exec.Command(incoming.GetCommand(), incoming.GetArguments()...)
+		cmd.Stderr = os.Stderr
+
+		if err := cmd.Run(); err != nil {
+			logger.Errorf("error while executing command: %v", err)
+		}
 	}
 }

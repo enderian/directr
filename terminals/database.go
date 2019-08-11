@@ -1,8 +1,10 @@
 package terminals
 
 import (
-	"github.com/enderian/directrd/types"
+	"fmt"
 	"log"
+
+	"github.com/enderian/directrd/types"
 )
 
 func loadTerminals() {
@@ -12,4 +14,10 @@ func loadTerminals() {
 		return
 	}
 	log.Printf("loaded %d terminals from the database.", len(terminals))
+}
+
+const ipKey = "directrd.terminal.%s.addr"
+
+func GetAddr(terminal string) (string, error) {
+	return ctx.Redis().Get(fmt.Sprintf(ipKey, terminal)).Result()
 }

@@ -1,8 +1,9 @@
 package api
 
 import (
-	"github.com/labstack/echo"
 	"net/http"
+
+	"github.com/labstack/echo"
 )
 
 func status(c echo.Context) error {

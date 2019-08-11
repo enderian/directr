@@ -1,9 +1,10 @@
 package api
 
 import (
+	"net/http"
+
 	"github.com/enderian/directrd/types"
 	"github.com/labstack/echo"
-	"net/http"
 )
 
 func terminalsGroup(g *echo.Group) {
@@ -11,7 +12,6 @@ func terminalsGroup(g *echo.Group) {
 }
 
 func terminalsAll(c echo.Context) error {
-
 	var terminals []*types.Terminal
 	if err := ctx.DB().Find(&terminals).Error; err != nil {
 		panic(err)

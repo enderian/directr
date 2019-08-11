@@ -5,8 +5,8 @@ import (
 	"net"
 )
 
-func (agent *Agent) incomingUDP() *net.UDPConn {
-	addr, err := net.ResolveUDPAddr("udp", agent.config.API.ServiceAddr)
+func incomingUDP() *net.UDPConn {
+	addr, err := net.ResolveUDPAddr("udp", config.API.ServiceAddr)
 	if err != nil {
 		log.Panicf("failed to parse server address: %v", err)
 	}
@@ -19,8 +19,8 @@ func (agent *Agent) incomingUDP() *net.UDPConn {
 	return conn
 }
 
-func (agent *Agent) outgoingUDP() *net.UDPConn {
-	addr, err := net.ResolveUDPAddr("udp", agent.config.API.ServiceAddr)
+func outgoingUDP() *net.UDPConn {
+	addr, err := net.ResolveUDPAddr("udp", config.API.ServiceAddr)
 	if err != nil {
 		log.Panicf("failed to parse server address: %v", err)
 	}

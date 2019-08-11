@@ -20,4 +20,6 @@ message Event {
     Scope scope = 1;
     Type type = 2;
     string terminal = 3;
+
+    map<string, string> data = 4;
 }

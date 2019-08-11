@@ -5,7 +5,6 @@ import (
 )
 
 var ctx types.Context
-var commandQueue = make(chan types.Command)
 
 func Setup(context types.Context) {
 	ctx = context

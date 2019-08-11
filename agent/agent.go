@@ -1,64 +1,47 @@
 package agent
 
 import (
-	"github.com/codegangsta/cli"
+	"fmt"
+	"os"
+
 	"github.com/enderian/directrd/types"
 	"github.com/kardianos/service"
-	"log"
-	"os"
 )
 
-type Agent struct {
-	hostname string
-	config   *types.Configuration
-	logger   service.Logger
+var svcConfig = &service.Config{
+	Name:        "directrd_agent",
+	DisplayName: "directrd agent",
+	Description: "The agent process for directrd.",
 }
 
-func Setup(c *cli.Context) error {
-	svcConfig := &service.Config{
-		Name:        "directrd agent service",
-		DisplayName: "directrd agent service",
-	}
+var hostname string
+var config *types.Configuration
+var logger service.Logger
 
-	prg := &Agent{}
-	s, err := service.New(prg, svcConfig)
-	if err != nil {
-		log.Fatal(err)
-	}
-	prg.logger, err = s.Logger(nil)
-	if err != nil {
-		return err
-	}
+type program struct{}
 
-	if conf, err := types.LoadConfiguration(c); err == nil {
-		prg.config = conf
+func (p *program) Start(s service.Service) error {
+	if hstn, err := os.Hostname(); err == nil {
+		hostname = hstn
 	} else {
-		_ = prg.logger.Errorf("failed to load configuration: $v", err)
-		return err
+		return fmt.Errorf("unable to retrieve machines hostname: %v", err)
 	}
 
-	return s.Run()
-}
-
-func (agent *Agent) Start(s service.Service) error {
-	_ = agent.logger.Info("directrd agent starting")
-	go agent.run()
+	go p.run()
 	return nil
 }
 
-func (agent *Agent) Stop(s service.Service) error {
-	_ = agent.logger.Info("directrd agent stopping")
-	agent.goingDown()
-	return nil
+func (p *program) run() {
+	logger.Infof("directrd agent starting")
+
+	greet()
+	go runKeepAlive()
+	go runCommandReceiver()
 }
 
-func (agent *Agent) run() {
-	if hostname, err := os.Hostname(); err == nil {
-		agent.hostname = hostname
-	} else {
-		_ = agent.logger.Errorf("unable to retrieve machines hostname: $v", err)
-		return
-	}
-	go agent.runKeepAlive()
-	go agent.runCommandReceiver()
+func (p *program) Stop(s service.Service) error {
+	logger.Infof("directrd agent stopping")
+
+	goingDown()
+	return nil
 }

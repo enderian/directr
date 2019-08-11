@@ -2,6 +2,8 @@
 *.iml
 /logs
 /bin
+/.vscode
+!/.vscode/launch.json
 
 *.yml
 !.travis.yml
