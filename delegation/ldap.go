@@ -4,8 +4,8 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
-	"github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/enderian/directrd/types"
+	"github.com/jinzhu/gorm/dialects/postgres"
 	"gopkg.in/ldap.v3"
 	"strings"
 )

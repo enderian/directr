@@ -11,10 +11,12 @@ type User struct {
 	FullName    string `json:"full_name"`
 	Affiliation string `json:"affiliation"`
 
-	DN string `json:"dn"`
+	PhoneNumber string `json:"phone_number"`
 
-	Local    bool   `json:"local"`
-	Password []byte `json:"password"`
+	DN string `json:"dn,omitempty"`
 
-	Extras postgres.Hstore `json:"extras"`
+	Local    bool   `json:"local,omitempty"`
+	Password []byte `json:"password,omitempty"`
+
+	Extras postgres.Hstore `json:"extras,omitempty"`
 }

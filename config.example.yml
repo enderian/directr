@@ -13,6 +13,7 @@ ldap:
   full_name_attribute: cn
   affiliation_attribute: eduPersonPrimaryAffiliation
   fix_full_name_case: true
+  mobile_attribute: mobile
 radius:
   shared_secret: 123abc
 user:
